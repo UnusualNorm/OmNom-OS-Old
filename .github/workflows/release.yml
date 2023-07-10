@@ -12,6 +12,10 @@ name: release-please
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release-please.outputs.releases_created }}
+      tag: ${{ steps.release-please.outputs.tag_name }}
+      upload_url: ${{ steps.release-please.outputs.upload_url }}
     steps:
       - uses: google-github-actions/release-please-action@v3
         id: release-please
@@ -55,3 +59,33 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run:
           gh release upload ${{ needs.release-please.outputs.tag }} ${{ steps.isogenerator.outputs.sha256sum-path }} -R ublue-os/main --clobber
+
+  rebase-live:
+    name: Rebase live branch
+    runs-on: ubuntu-22.04
+    needs: release-please
+    if: needs.release-please.outputs.releases_created
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Set up Git
+      run: |
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+        
+    # No need to pull, as the checkout action should never differ from the ssh url
+    - name: Set origin url
+      run: |
+        git remote set-url origin git@github.com:${{ github.repository }}.git
+        git fetch origin
+
+    # We push it even if there are no changes, just in case
+    - name: Force push live branch
+      run: |
+        git push origin live -f
