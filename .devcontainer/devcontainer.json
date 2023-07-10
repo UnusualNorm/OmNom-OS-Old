@@ -19,10 +19,17 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "docker run -d -p 5000:5000 --restart=always --name registry registry:2"
+	"postCreateCommand": "docker run -d -p 5000:5000 --restart=always --name registry registry:2",
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"github.vscode-github-actions",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	}
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
