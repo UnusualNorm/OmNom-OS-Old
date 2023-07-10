@@ -53,13 +53,13 @@ jobs:
         if: steps.get-diff.outputs.diff != ''
         id: pr-exists
         run: |
-          gh pr view -B live -H template
+          gh pr view -B main -H template
           echo "::set-output name=exists::false"
         continue-on-error: true
 
       # No need to check for the diff, as `exists` will only be true if there is a diff
       - name: Create pull request
         if: steps.pr-exists.outputs.exists == 'false'
-        run: gh pr create -B live -H template --title 'Merge Upstream Changes' --body 'Created by the rebase-template Github Action'
+        run: gh pr create -B main -H template --title 'Merge Upstream Changes' --body 'Created by the rebase-template Github Action'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
