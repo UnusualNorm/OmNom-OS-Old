@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/UnusualNorm/OmNom-OS/compare/v1.0.0...v1.0.1) (2023-07-13)
+
+
+### Bug Fixes
+
+* checkout main as live ([46097b9](https://github.com/UnusualNorm/OmNom-OS/commit/46097b96653a24bc6d0bbcd7b8f6858f5be56e90))
+
 ## 1.0.0 (2023-07-13)
 
 
