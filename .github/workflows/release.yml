@@ -88,4 +88,5 @@ jobs:
     # We push it even if there are no changes, just in case
     - name: Force push live branch
       run: |
+        git checkout origin/main -B live
         git push origin live -f
