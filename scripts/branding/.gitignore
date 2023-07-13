@@ -1,11 +1,1 @@
-*
-!.gitignore
-!apply.py
-!fedora_logo.svg
-!fedora_whitelogo.svg
-!fedora-logo-sprite.svg
-!fedora-logo.svg
-!generate.py
-!os-release
-!poweredby.svg
-!xpm.py
+__pycache__/
