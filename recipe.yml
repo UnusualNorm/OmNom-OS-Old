@@ -72,6 +72,9 @@ rpm:
     - firefox
     - firefox-langpacks
 
+    # We have our own branding, no need for Fedora
+    - fedora-logos
+
 # Configuration for the "first boot" experience, which is available after login.
 firstboot:
   # Whether to embed "yafti" into the OS image and configure it to autostart,
