@@ -18,6 +18,7 @@ Network=host
 AddCapability=NET_ADMIN
 AddCapability=SYS_ADMIN
 Volume=zerotier-one.volume:/var/lib/zerotier-one
+AutoUpdate=registry
 Image=quay.io/zyclonite/zerotier:latest
 
 [Service]
