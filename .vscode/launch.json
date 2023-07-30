@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "command": "docker build . -f Containerfile -t localhost:5000/ublue:latest && docker image push localhost:5000/ublue:latest && read && exit",
+            "command": "docker build . -f Containerfile -t localhost:5000/ublue:latest && docker image push localhost:5000/ublue:latest && echo Done! && read && exit",
             "name": "Build and Push Docker Image",
             "request": "launch",
             "type": "node-terminal"
