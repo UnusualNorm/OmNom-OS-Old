@@ -1,0 +1,65 @@
+name: rebase-template
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+env:
+  UPSTREAM_REPO: https://github.com/ublue-os/startingpoint.git
+
+jobs:
+  rebase-template:
+    name: Rebase template branch
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          
+      # No need to pull, as the checkout action should never differ from the ssh url
+      - name: Set origin url
+        run: |
+          git remote set-url origin git@github.com:${{ github.repository }}.git
+          git fetch origin
+
+      - name: Checkout upstream template
+        run: |
+          git remote add upstream ${{ env.UPSTREAM_REPO }}
+          git fetch upstream
+          git checkout upstream/template -B template
+
+      # We push it even if there are no changes, just in case
+      - name: Force push upstream template
+        run: |
+          git push origin template -f
+
+      - name: Get diff
+        id: get-diff
+        run: |
+          DIFF=$(git diff --name-only --exit-code template origin/template)
+          echo "::set-output name=diff::${DIFF}"
+
+      - name: Identify existing pull request
+        if: steps.get-diff.outputs.diff != ''
+        id: pr-exists
+        run: |
+          gh pr view -B main -H template
+          echo "::set-output name=exists::false"
+        continue-on-error: true
+
+      # No need to check for the diff, as `exists` will only be true if there is a diff
+      - name: Create pull request
+        if: steps.pr-exists.outputs.exists == 'false'
+        run: gh pr create -B main -H template --title 'Merge Upstream Changes' --body 'Created by the rebase-template Github Action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
