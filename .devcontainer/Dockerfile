@@ -2,8 +2,7 @@ FROM mcr.microsoft.com/devcontainers/base:bullseye
 
 COPY daemon.json /etc/docker/daemon.json
 
-RUN apt-get update && \
-    apt-get upgrade
+RUN apt-get update
 
 RUN apt-get install -y \
     python3 python3-pip \
