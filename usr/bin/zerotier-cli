@@ -1,2 +1,2 @@
 #!/bin/bash
-podman exec zerotier-one zerotier-cli $@
+podman exec systemd-zerotier-one zerotier-cli $@
